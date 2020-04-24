@@ -53,6 +53,7 @@ class App extends Component {
 
   onButtonClick = () => {
     this.setState({imgUrl: this.state.input})
+    
     app.models  
       .predict(
         Clarifai.FACE_DETECT_MODEL, 
