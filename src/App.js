@@ -4,6 +4,9 @@ import Logo from './components/Logo/Logo';
 import Rank from './components/Rank/Rank';
 import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
 import FaceRecognation from './components/FaceRecognition/FaceRecognition';
+import Signin from './components/Signin/Signin';
+import Register from './components/Register/Register';
+
 import Clarifai from 'clarifai';
 import './App.css';
 
@@ -22,7 +25,9 @@ class App extends Component {
     this.state = {
       input: '',
       imgUrl: '',
-      box: ''
+      box: '',
+      route: 'signin',
+      isSignedIn: false
     }
   }
 
@@ -62,16 +67,39 @@ class App extends Component {
       .catch(err => console.log(err))
   }
 
- 
+  onRouteChange = (route) => {
+    if(route === 'signout') {
+      this.setState({isSignedIn: false})
+    } else if(route === 'home'){
+      this.setState({isSignedIn: true})
+    }
+    this.setState({route: route})
+    console.log(route)
+  }
+
+
   render() {
     return (
       <div className="App">
-        <Navigation />
-        <Logo />
-        <Rank />
-        <ImageLinkForm onButtonClick={this.onButtonClick} onInputChange={this.onInputChange}/>
-        <FaceRecognation box={this.state.box} imgUrl={this.state.imgUrl}/> 
+        <Navigation isSignedIn={this.state.isSignedIn} onRouteChange={this.onRouteChange} />
+        {this.state.route === 'home'
+          ?<div>
+            <Logo />
+            <Rank />
+            <ImageLinkForm onButtonClick={this.onButtonClick} onInputChange={this.onInputChange}/>
+            <FaceRecognation box={this.state.box} imgUrl={this.state.imgUrl}/>
+          </div>
+          :(this.state.route === 'signin'
+            ?<Signin onRouteChange={this.onRouteChange}/>
+            :<Register onRouteChange={this.onRouteChange} />
+          )
+          
+          
+          
+        }
       </div>
+        
+        
     );
   }
   
